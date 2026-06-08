@@ -1,0 +1,70 @@
+1. # Difference between HashMap and ConcurrentHashMap. 
+ConcurrentHashMap is thread-safe ✅
+HashMap is not thread-safe ✅
+HashMap is fail-fast ✅
+ConcurrentHashMap is fail-safe ✅
+
+MyAns: Hashtable and concurrent hashmap. The difference between
+ the hashmap and concurrent hashmap is the concurrent hashmap is 
+ a thread-safe and the hashmap is not thread-safe, the first of 
+ all. Okay. And hashmap is a fail-fast and concurrent hashmap is 
+ a fail-safe. Yeah. Yeah, this is a two different, I thought so.
+
+ 7YearAns : HashMap is not thread-safe and allows one null key and multiple null values.
+ConcurrentHashMap is thread-safe and does not allow null keys or values.
+In Java 7 it used segment-level locking, but in Java 8 it uses bucket-level locking and CAS for better performance.
+HashMap is fail-fast whereas ConcurrentHashMap is fail-safe because it does not throw ConcurrentModificationException during iteration.
+Due to fine-grained locking, ConcurrentHashMap performs better in multi-threaded environments compared to Hashtable.
+
+Q2: How does HashMap work internally?
+Explain:
+hash()
+index calculation
+collision handling
+load factor
+rehashing
+
+# What changed in Java 8?
+
+CandidateAns:
+HashMap internally uses a dynamic array of Node objects to store key-value pairs. Here's how it works:
+
+**hash()** - When you add a key-value pair, HashMap first calls the key's hashCode() method to get a hash value. The built-in hash() method then applies bit manipulation to this hash code to reduce collisions and improve distribution across the array.
+
+**Index Calculation** - Instead of using modulo, HashMap uses a bitwise AND operation: `index = hash(key) & (capacity - 1)`. This works because the capacity is always a power of 2 (default is 16), making this operation much faster than modulo while achieving the same result.
+
+**Collision Handling** - Multiple keys can map to the same index, causing collisions. Before Java 8, HashMap resolved this using LinkedLists in each bucket—if two keys hashed to the same position, they'd be stored as a chain. However, if collisions are frequent, lookup becomes O(n). Java 8 improved this by converting a LinkedList to a Red-Black Tree when a bucket exceeds 8 entries, reducing worst-case lookup time from O(n) to O(log n).
+
+**Load Factor** - By default, it's 0.75. This means when the HashMap becomes 75% full (size exceeds `capacity × 0.75`), it triggers resizing. This balances space and performance—if too high, more collisions occur; if too low, we waste memory.
+
+**Rehashing** - When the threshold is exceeded, HashMap creates a new array with double the capacity and re-inserts all existing entries using their hash values. This is expensive (O(n)), but happens infrequently, keeping average get/put operations at O(1).
+
+In summary, HashMap achieves O(1) average performance through hashing, bit manipulation for indexing, and intelligent collision resolution strategies that adapted with Java 8.
+
+MyAns :
+MyAns :
+HashMap internal working. So HashMap internally implemented an array of nodes, and yeah, array of nodes, it's mostly working in a hash code and hashing. Hash code is calculated using the hash function and the help of the hash method, hash method and equal method, and it's found some hashing, and it can store in a bucket. And yeah, and do in a bucket in indexing. And yeah, once the hash code is created, we can store as a key in the hash code and the value regarding the value. Maybe the hash value is the same. If the second collision is happened, then occur the high score collision and high score collision, we can concur using the collision handling. We can before Java 8, we can using the linked list. After Java 8, we are using the tree map. Once the threads are old, and we in a hashmap, we having something like a 16 bucket by default using the some load factor by 7, we can increase the load factor. And yeah, that's the internal working of the hashmap and internally it is based on the hash table implemented in the data
+
+7years MyAns:
+    HashMap internally uses an array of Node objects.
+    When we insert a key-value pair, first hashCode() is calculated.
+    Then hash() method applies bit manipulation to reduce collisions.
+    Index is calculated using (n - 1) & hash.
+    If bucket is empty, new node is inserted.
+    If collision occurs, before Java 8 it uses LinkedList.
+    After Java 8, if bucket size exceeds 8, it converts to Red-Black Tree to improve performance from O(n) to O(log n).
+    Default initial capacity is 16 and load factor is 0.75.
+    When size exceeds threshold (capacity × loadFactor), rehashing happens and capacity doubles.
+
+3. # What happens internally if:
+Two keys have same hashCode
+But equals() returns false?
+
+MyAns: If two key has the same hash code, it means the hash collision is occurred. It means we can handle using, it means we can store in a same bucket using the linked list. If the threshold of that linked list is increases the eight, we can use the tree. Okay, so I call return false when the hash code is the same, but they are the two different objects. So when we are retrieving, then again we calculate the hash code, we can reach the particular correct bucket and again we have to use the equal and find the correct object and return that thing.
+
+7YearAns:
+    If two keys have same hashCode, they will go into the same bucket because index calculation depends on hash value.
+    However, if equals() returns false, it means they are different objects, so both will be stored in the same bucket as separate nodes.
+    During retrieval, HashMap first calculates hashCode to find the bucket, and then it uses equals() to compare keys sequentially in that bucket to find the exact match.
+    Before Java 8, collision handling was done using LinkedList (O(n)).
+    After Java 8, if bucket size exceeds 8, it converts into Red-Black Tree to improve search performance to O(log n).

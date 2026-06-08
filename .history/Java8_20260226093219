@@ -1,0 +1,52 @@
+1. # What is Functional Interface?
+A Functional Interface is an interface that contains exactly one abstract method.
+
+It represents a function as a type.
+
+Before Java 8:
+Java was purely Object-Oriented.
+Behavior could not be passed directly.
+We had to use anonymous classes.
+Java 8 introduced functional interfaces to support:
+Lambda expressions
+Functional programming style
+Stream API
+
+Example:
+
+@FunctionalInterface
+interface Calculator {
+    int calculate(int a, int b);
+}
+
+Important points:
+Can have multiple default methods
+Can have multiple static methods
+Can override Object class methods
+Only ONE abstract method allowed
+
+🔎 Internal Understanding
+
+Functional interface enables:
+
+👉 Lambda expression compilation
+👉 invokedynamic bytecode instruction
+👉 No anonymous inner class creation
+
+JVM uses LambdaMetafactory to create implementation at runtime.
+
+⚠️ 7+ Years Developer Mistake
+
+Thinking @FunctionalInterface is mandatory ❌ (It is optional)
+
+Not understanding that Object methods don’t count
+Not knowing performance difference between lambda and anonymous class
+
+🎯 Interview Compact Answer
+
+A functional interface is an interface with exactly one 
+abstract method. It enables lambda expressions in Java. 
+It can contain multiple default and static methods but 
+only one abstract method. Internally, Java uses invokedynamic 
+and LambdaMetafactory to implement lambdas efficiently without 
+creating separate class files.

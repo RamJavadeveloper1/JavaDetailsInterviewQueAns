@@ -1,0 +1,3332 @@
+# 📝 Core Java Quick Summary for Interview Preparation
+
+This document covers common Java topics you should review:
+
+- **OOP fundamentals**: classes, interfaces, abstract classes, inheritance, polymorphism, encapsulation, abstraction.
+- **Core language features**: exceptions, collections (List/Set/Map/Concurrent), generics, I/O, streams, NIO.
+- **Concurrency**: threads, synchronization, executors, atomic & lock classes, volatile, locks.
+- **Java versions features**: lambdas, streams, modules, records, var, switch expressions.
+- **Memory management**: heap vs stack, GC basics, JVM memory model.
+- **JVM internals**: class loading, bytecode, JIT compilation, reflection, annotations.
+- **Design patterns & best practices**: singleton, factory, dependency injection, effective Java rules.
+- **Collections related topics**: differences between ArrayList/LinkedList, HashMap vs TreeMap, Concurrent collections, iterator behavior, hashing/equals, comparators.
+- **Serialization & I/O**: object serialization, externalizable, file I/O, streams vs readers/writers.
+
+Missing topics to consider: advanced JVM tuning, security (sandbox, permissions), internationalization, JDBC basics, RMI, CORBA, Java modules (JPMS), records and sealed classes (Java 17+), pattern matching.
+
+Use this quick checklist to make sure you're comfortable with all major areas before diving into the detailed Q&A below.
+---
+CORE JAVA INTERVIEW QUESTIONS (7+ YEARS)
+1. # Question: What is the difference between an abstract class and an interface?
+Answer:
+An abstract class and an interface are both used to achieve abstraction in Java.
+
+An abstract class:
+- Can have abstract methods and concrete methods.
+- Can have instance variables.
+- Can have constructors.
+- A class can extend only one abstract class.   
+
+An interface:
+- Defines a contract for classes.
+- Before Java 8 it had only abstract methods.
+- From Java 8 it can contain default and static methods.
+- From Java 9 it can contain private methods.
+- A class can implement multiple interfaces.
+Abstract classes are used for code reuse, while interfaces are used for defining capabilities.
+
+# Question: What is the difference between an abstract class and an interface? Also explain similarities and when to use each.
+Answer:
+
+1. Similarities between Abstract Class and Interface
+Both are used to achieve abstraction in Java.
+
+Similarities:
+- Both cannot be instantiated directly.
+- Both can contain abstract methods.
+- Both are used to achieve abstraction and define common behavior.
+- Both are extended/implemented by other classes.
+- Both support polymorphism.
+
+--------------------------------------------------
+
+2. Differences between Abstract Class and Interface
+
+Abstract Class
+- Can contain both abstract and concrete methods.
+- Can have instance variables.
+- Can have constructors.
+- Can have any access modifier (private, protected, public).
+- A class can extend only one abstract class.
+- Used when classes share common state and behavior.
+
+Interface
+- Mostly contains abstract methods (until Java 8).
+- From Java 8 it can contain default and static methods.
+- From Java 9 it can contain private methods.
+- Variables are by default public static final.
+- Methods are by default public.
+- A class can implement multiple interfaces.
+- Used to define capabilities or contracts.
+
+--------------------------------------------------
+
+3. Example
+
+Abstract Class Example
+
+abstract class Animal {
+    String name;
+
+    abstract void sound();
+
+    void sleep() {
+        System.out.println("Animal is sleeping");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+--------------------------------------------------
+
+Interface Example
+
+interface Flyable {
+    void fly();
+}
+
+class Bird implements Flyable {
+    public void fly() {
+        System.out.println("Bird can fly");
+    }
+}
+
+--------------------------------------------------
+
+4. # When to Use Abstract Class
+
+Use Abstract Class when:
+
+- Classes share common fields or state
+- You want to provide default method implementations
+- You want constructors
+- Classes are closely related
+
+Example Use Case:
+Animal → Dog, Cat, Lion
+
+All animals share properties like:
+- name
+- age
+- eat()
+- sleep()
+
+--------------------------------------------------
+5. When to Use Interface
+Use Interface when:
+- You want to define capability or behavior
+- Multiple unrelated classes need the same functionality
+- Multiple inheritance is required
+Example Use Case:
+interface Flyable
+Implemented by:
+Bird
+Airplane
+Drone
+These classes are not related but share the ability to fly.
+--------------------------------------------------
+6. Real Interview Summary Answer (Short)
+
+Abstract class is used when classes share common state and behavior and we want partial implementation.
+Interface is used to define a contract or capability that multiple unrelated classes can implement.
+Abstract class supports single inheritance while interface supports multiple inheritance.
+
+-------------------------------------------------
+FOLLOW-UP QUESTIONS: ABSTRACT CLASS vs INTERFACE
+--------------------------------------------------
+1. # Question: Can an abstract class implement an interface?
+Answer:
+Yes.
+An abstract class can implement an interface but does not have to implement all its methods.
+Example:
+
+interface A {
+    void display();
+}
+
+abstract class B implements A {
+}
+Since B is abstract, it does not need to implement display().
+--------------------------------------------------
+2. Question: Can an interface extend another interface?
+Answer:
+Yes.
+An interface can extend one or more interfaces.
+Example:
+interface A {
+    void methodA();
+}
+
+interface B extends A {
+    void methodB();
+}
+
+This supports multiple inheritance in Java.
+--------------------------------------------------
+
+3. Question: Can an interface extend a class?
+
+Answer:
+No.
+
+An interface can only extend another interface.
+
+--------------------------------------------------
+4. Question: Can an abstract class extend another abstract class?
+Answer:
+Yes.
+An abstract class can extend another abstract class.
+Example:
+
+abstract class A {
+    abstract void show();
+}
+
+abstract class B extends A {
+}
+
+--------------------------------------------------
+5. Question: Can an interface have variables?
+Answer:
+Yes.
+But all variables in an interface are:
+public static final
+
+Example:
+interface A {
+    int x = 10;
+}
+
+This is internally:
+public static final int x = 10;
+--------------------------------------------------
+6. Question: Can an interface have constructors?
+Answer:
+No.
+
+Interfaces cannot have constructors because they cannot be instantiated.
+
+--------------------------------------------------
+
+7. Question: Can an abstract class have constructors?
+
+Answer:
+Yes.
+
+Abstract classes can have constructors because they are used by subclasses.
+
+Example:
+
+abstract class A {
+    A() {
+        System.out.println("Constructor of abstract class");
+    }
+}
+
+--------------------------------------------------
+
+8. Question: Can an interface have method implementations?
+Answer:
+Yes, starting from Java 8.
+
+Interfaces can have:
+default methods
+static methods
+Example:
+
+interface A {
+    default void show() {
+        System.out.println("Default method");
+    }
+}
+
+--------------------------------------------------
+9. Question: Can an interface contain private methods?
+
+Answer:
+Yes, since Java 9.
+
+Private methods are used internally by default methods.
+
+--------------------------------------------------
+
+10. Question: Can a class extend multiple abstract classes?
+
+Answer:
+No.
+
+Java does not support multiple inheritance for classes.
+A class can extend only one abstract class.
+
+However it can implement multiple interfaces.
+Example:
+class Test extends A implements B, C
+--------------------------------------------------
+
+INTERVIEW SHORT SUMMARY
+Abstract Class
+- Used for shared code and state
+- Supports constructors
+- Supports partial implementation
+- Only single inheritance
+
+Interface
+- Used to define capabilities
+- Supports multiple inheritance
+- No instance state
+- Used for loose coupling
+
+--------------------------------------------------
+FOLLOW-UP QUESTIONS: ABSTRACT CLASS vs INTERFACE
+
+--------------------------------------------------
+
+1. Question: Can an abstract class implement an interface?
+
+Answer:
+Yes.
+
+An abstract class can implement an interface but does not have to implement all its methods.
+
+Example:
+
+interface A {
+    void display();
+}
+
+abstract class B implements A {
+}
+
+Since B is abstract, it does not need to implement display().
+
+--------------------------------------------------
+
+2. Question: Can an interface extend another interface?
+
+Answer:
+Yes.
+
+An interface can extend one or more interfaces.
+
+Example:
+
+interface A {
+    void methodA();
+}
+
+interface B extends A {
+    void methodB();
+}
+
+This supports multiple inheritance in Java.
+
+--------------------------------------------------
+
+3. Question: Can an interface extend a class?
+Answer:
+No.
+An interface can only extend another interface.
+--------------------------------------------------
+4. Question: Can an abstract class extend another abstract class?
+Answer:
+Yes.
+An abstract class can extend another abstract class.
+
+Example:
+
+abstract class A {
+    abstract void show();
+}
+
+abstract class B extends A {
+}
+
+--------------------------------------------------
+5. Question: Can an interface have variables?
+Answer:
+Yes.
+But all variables in an interface are:
+public static final
+
+Example:
+interface A {
+    int x = 10;
+}
+
+This is internally:
+public static final int x = 10;
+
+--------------------------------------------------
+
+6. Question: Can an interface have constructors?
+Answer:
+No.
+
+Interfaces cannot have constructors because they cannot be instantiated.
+--------------------------------------------------
+7. Question: Can an abstract class have constructors?
+Answer:
+Yes.
+Abstract classes can have constructors because they are used by subclasses.
+
+Example:
+
+abstract class A {
+    A() {
+        System.out.println("Constructor of abstract class");
+    }
+}
+
+--------------------------------------------------
+
+8. Question: Can an interface have method implementations?
+
+Answer:
+Yes, starting from Java 8.
+
+Interfaces can have:
+
+default methods
+static methods
+
+Example:
+
+interface A {
+    default void show() {
+        System.out.println("Default method");
+    }
+}
+
+--------------------------------------------------
+
+9. Question: Can an interface contain private methods?
+
+Answer:
+Yes, since Java 9.
+
+Private methods are used internally by default methods.
+
+--------------------------------------------------
+
+10. Question: Can a class extend multiple abstract classes?
+
+Answer:
+No.
+
+Java does not support multiple inheritance for classes.
+
+A class can extend only one abstract class.
+
+However it can implement multiple interfaces.
+
+Example:
+
+class Test extends A implements B, C
+
+--------------------------------------------------
+
+INTERVIEW SHORT SUMMARY
+Abstract Class
+- Used for shared code and state
+- Supports constructors
+- Supports partial implementation
+- Only single inheritance
+
+Interface
+- Used to define capabilities
+- Supports multiple inheritance
+- No instance state
+- Used for loose coupling
+--------------------------------------------------
+2. Question: What is the super keyword in Java?
+
+Answer:
+The super keyword refers to the immediate parent class object.
+
+It is used to:
+1. Call parent class constructor.
+2. Access parent class methods.
+3. Access parent class variables.
+
+Example:
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        super.sound();
+        System.out.println("Dog bark");
+    }
+}
+--------------------------------------------------
+3. Question: What is the final keyword in Java?
+
+Answer:
+The final keyword is used to restrict modification.
+
+Final Variable:
+The value cannot be changed once assigned.
+
+Final Method:
+The method cannot be overridden.
+
+Final Class:
+The class cannot be extended.
+
+Example:
+
+final int x = 10;
+
+--------------------------------------------------
+
+4. Question: What is a static variable in Java?
+Answer:
+A static variable belongs to the class rather than the object.
+
+Characteristics:
+- Shared among all objects.
+- Created once in memory.
+- Accessed using class name.
+
+Example:
+class Counter {
+    static int count = 0;
+}
+--------------------------------------------------
+5. Question: What is a static method?
+Answer:
+A static method belongs to the class rather than an object.
+It can be called without creating an object.
+
+Example:
+class Utility {
+    static void display() {
+        System.out.println("Static method");
+    }
+}
+Call:
+Utility.display();
+
+--------------------------------------------------
+6. Question: What is the Object class in Java?
+
+Answer:
+The Object class is the root class of the Java class hierarchy.
+
+Every class in Java implicitly extends Object.
+Important methods:
+toString()
+equals()
+hashCode()
+clone()
+getClass()
+wait
+notify
+notifyAll
+--------------------------------------------------
+
+7. # Question: What is Garbage Collection in Java?
+
+Answer:
+Garbage Collection is the automatic process of removing unused objects from memory.
+If an object has no reference pointing to it, it becomes eligible for garbage collection.
+
+Example:
+Student s = new Student();
+s = null;
+The object can now be removed by the JVM.
+
+--------------------------------------------------
+
+8. Question: What is Heap memory?
+
+Answer:
+Heap memory stores objects created using the new keyword.
+
+Characteristics:
+- Shared across threads
+- Managed by JVM
+- Garbage collection happens here
+
+Example:
+
+Student s = new Student();
+
+--------------------------------------------------
+
+9. Question: What is Stack memory?
+
+Answer:
+Stack memory stores method calls and local variables.
+
+Characteristics:
+- Each thread has its own stack
+- Automatically cleared after method execution
+
+Example:
+void display() {
+   int x = 10;
+}
+--------------------------------------------------
+10. Question: What is the main method in Java?
+Answer:
+The main method is the entry point of a Java program.
+
+Syntax:
+public static void main(String[] args)
+
+Explanation:
+public → accessible everywhere
+static → JVM can call without object
+void → returns nothing
+String[] args → command line arguments
+
+--------------------------------------------------
+
+CORE JAVA INTERVIEW QUESTIONS (50 Q&A)
+
+1. Question: What is a class in Java?
+Answer:
+A class is a blueprint or template used to create objects. It defines properties (variables) and behaviors (methods). It does not occupy memory until an object is created.
+
+--------------------------------------------------
+2. Question: What is an object in Java?
+Answer:
+An object is an instance of a class. It represents a real-world entity and contains data and methods defined by the class.
+
+Example:
+Student s = new Student();
+--------------------------------------------------
+3. Question: What are the four pillars of OOP in Java?
+Answer:
+1. Encapsulation
+2. Abstraction
+3. Inheritance
+4. Polymorphism
+These principles help in building reusable and maintainable code.
+--------------------------------------------------
+4. Question: What is encapsulation?
+Answer:
+Encapsulation is the process of binding variables and methods into a single unit (class) and restricting direct access to data using private variables and public getters/setters.
+
+--------------------------------------------------
+5. Question: What is inheritance?
+Answer:
+Inheritance allows one class to acquire properties and behaviors of another class.
+
+Example:
+class Dog extends Animal
+This promotes code reuse.
+--------------------------------------------------
+6. Question: What is polymorphism?
+Answer:
+Polymorphism means "many forms". It allows one method to behave differently based on the object.
+
+Types:
+1. Compile-time polymorphism (method overloading)
+2. Runtime polymorphism (method overriding)
+
+--------------------------------------------------
+7. Question: What is abstraction?
+Answer:
+Abstraction hides implementation details and shows only essential features.
+It can be achieved using:
+1. Abstract classes
+2. Interfaces
+
+--------------------------------------------------
+8. Question: What is method overloading?
+Answer:
+Method overloading means defining multiple methods with the same name but different parameters in the same class.
+
+Example:
+add(int a, int b)
+add(int a, int b, int c)
+--------------------------------------------------
+9. Question: What is method overriding?
+Answer:
+Method overriding occurs when a subclass provides its own implementation of a method already defined in the parent class.
+--------------------------------------------------
+10. Question: What is the difference between overloading and overriding?
+Answer:
+Overloading:
+Same method name with different parameters.
+
+Overriding:
+Same method signature in parent and child class.
+--------------------------------------------------
+
+11. Question: What is a constructor?
+Answer:
+A constructor is a special method used to initialize objects. It has the same name as the class and no return type.
+
+Example:
+Student(){
+}
+--------------------------------------------------
+
+12. Question: What is the difference between constructor and method?
+Answer:
+Constructor initializes objects.
+Method performs operations.
+
+Constructor has no return type while methods have return types.
+--------------------------------------------------
+13. Question: What is the this keyword?
+Answer:
+The this keyword refers to the current object of the class. It is used to differentiate instance variables from local variables.
+
+Example:
+this.name = name;
+--------------------------------------------------
+14. Question: What is the super keyword?
+Answer:
+The super keyword refers to the parent class object. It is used to call parent class methods or constructors.
+
+--------------------------------------------------
+
+15. Question: What is the difference between abstract class and interface?
+Answer:
+Abstract class:
+Can have abstract and concrete methods.
+Can have variables and constructors.
+
+Interface:
+Defines a contract.
+Supports multiple inheritance.
+Can have default and static methods.
+--------------------------------------------------
+
+16. Question: What is a static variable?
+Answer:
+A static variable belongs to the class rather than the object and is shared among all objects.
+
+--------------------------------------------------
+
+17. Question: What is a static method?
+Answer:
+A static method belongs to the class and can be called without creating an object.
+
+Example:
+Math.sqrt()
+
+--------------------------------------------------
+
+18. Question: What is the final keyword?
+Answer:
+Final keyword restricts modification.
+
+Final variable → cannot change value
+Final method → cannot override
+Final class → cannot extend
+
+--------------------------------------------------
+
+19. Question: What is a nested class?
+Answer:
+A class defined inside another class is called a nested class.
+
+--------------------------------------------------
+
+20. Question: What is an inner class?
+Answer:
+An inner class is a non-static nested class that can access members of the outer class.
+
+--------------------------------------------------
+
+21. Question: What is an anonymous class?
+Answer:
+An anonymous class is a class without a name used to override methods or implement interfaces instantly.
+
+--------------------------------------------------
+
+22. Question: What is JVM?
+Answer:
+JVM (Java Virtual Machine) runs Java bytecode and converts it into machine code.
+
+--------------------------------------------------
+
+23. Question: What is JDK?
+Answer:
+JDK (Java Development Kit) provides tools required to develop Java applications including compiler and libraries.
+
+--------------------------------------------------
+
+24. Question: What is JRE?
+Answer:
+JRE (Java Runtime Environment) provides the environment required to run Java programs.
+
+--------------------------------------------------
+
+25. Question: What is platform independence?
+Answer:
+Java is platform independent because compiled bytecode runs on any system with JVM.
+
+--------------------------------------------------
+
+26. Question: What is Heap memory?
+Answer:
+Heap memory stores objects created using the new keyword. It is shared among all threads.
+
+--------------------------------------------------
+
+27. Question: What is Stack memory?
+Answer:
+Stack memory stores method calls and local variables. Each thread has its own stack.
+
+--------------------------------------------------
+
+28. Question: What is Garbage Collection?
+Answer:
+Garbage collection automatically removes unused objects from memory.
+
+--------------------------------------------------
+
+29. Question: What makes an object eligible for garbage collection?
+Answer:
+If an object has no reference pointing to it, it becomes eligible for garbage collection.
+
+--------------------------------------------------
+
+30. Question: What is the Object class?
+Answer:
+Object is the root class of Java. All classes implicitly extend Object.
+
+--------------------------------------------------
+
+31. Question: What is toString() method?
+Answer:
+toString() returns the string representation of an object.
+
+--------------------------------------------------
+
+32. Question: What is equals() method?
+Answer:
+equals() compares the logical equality of two objects.
+
+--------------------------------------------------
+
+33. Question: What is hashCode() method?
+Answer:
+hashCode() returns an integer representation of the object used in hashing.
+
+--------------------------------------------------
+
+34. Question: What is clone() method?
+Answer:
+clone() creates a copy of an object.
+
+--------------------------------------------------
+
+35. Question: What is shallow copy?
+Answer:
+Shallow copy copies the object but not the referenced objects inside it.
+
+--------------------------------------------------
+
+36. Question: What is deep copy?
+Answer:
+Deep copy copies both the object and all referenced objects.
+--------------------------------------------------
+Question: What is Shallow Copy in Java?
+
+Answer:
+A shallow copy creates a new object but does NOT create copies of the objects referenced inside it. 
+
+Instead, it copies the references to those objects.
+This means:
+- The main object is copied.
+- The internal referenced objects are shared between the original and copied object.
+   If the referenced object is modified, the change will be reflected in both objects.
+
+Example:
+class Address {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+}
+
+class Employee implements Cloneable {
+    int id;
+    Address address;
+
+    Employee(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) throws Exception {
+
+        Address address = new Address("Delhi");
+
+        Employee e1 = new Employee(1, address);
+        Employee e2 = (Employee) e1.clone();   // shallow copy
+
+        e2.address.city = "Mumbai";
+
+        System.out.println(e1.address.city); // Mumbai
+        System.out.println(e2.address.city); // Mumbai
+    }
+}
+
+Explanation:
+
+Both e1 and e2 refer to the same Address object. 
+When we change the city in e2, it also changes in e1.
+
+Memory representation:
+
+Employee e1 ---> Address("Delhi")
+Employee e2 ---^
+
+Both point to the same Address object.
+
+--------------------------------------------------
+Question: What is Deep Copy in Java?
+Answer:
+A deep copy creates a completely independent copy of the object including all referenced objects.
+This means:
+- The main object is copied.
+- All nested objects are also copied.
+
+Changes made in the copied object will NOT affect the original object.
+
+Example:
+
+class Address {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+}
+
+class Employee implements Cloneable {
+    int id;
+    Address address;
+
+    Employee(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    protected Object clone() throws CloneNotSupportedException {
+
+        Address newAddress = new Address(address.city);
+        return new Employee(id, newAddress);
+    }
+}
+
+public class Test {
+    public static void main(String[] args) throws Exception {
+
+        Address address = new Address("Delhi");
+
+        Employee e1 = new Employee(1, address);
+        Employee e2 = (Employee) e1.clone();   // deep copy
+
+        e2.address.city = "Mumbai";
+
+        System.out.println(e1.address.city); // Delhi
+        System.out.println(e2.address.city); // Mumbai
+    }
+}
+Explanation:
+Here we created a new Address object during cloning.
+So:
+Employee e1 ---> Address("Delhi")
+Employee e2 ---> Address("Mumbai")
+Both objects are completely independent.
+--------------------------------------------------
+Difference between Shallow Copy and Deep Copy
+
+Shallow Copy
+- Copies only the main object
+- Referenced objects are shared
+- Faster
+- May cause unintended side effects
+Deep Copy
+- Copies main object and referenced objects
+- Objects are independent
+- Safer but slower
+
+--------------------------------------------------
+
+Interview Tip (Very Common Question):
+
+Shallow Copy → copies references  
+Deep Copy → copies actual objects
+
+
+
+--------------------------------------------------
+
+37. Question: What is String immutability?
+Answer:
+String objects cannot be modified once created.
+
+--------------------------------------------------
+
+38. Question: Why is String immutable?
+Answer:
+For security, thread safety, and memory optimization.
+--------------------------------------------------
+
+39. Question: What is the String Pool?
+Answer:
+String Pool is a special memory area where string literals are stored.
+
+--------------------------------------------------
+
+40. Question: Difference between == and equals()?
+Answer:
+== compares references.
+equals() compares object values.
+
+--------------------------------------------------
+
+41. Question: What is type casting?
+Answer:
+Type casting converts one data type into another.
+
+--------------------------------------------------
+
+42. Question: What is implicit casting?
+Answer:
+Automatic conversion from smaller type to larger type.
+
+Example:
+int → double
+--------------------------------------------------
+
+43. Question: What is explicit casting?
+Answer:
+Manual conversion from larger type to smaller type.
+
+Example:
+double → int
+
+--------------------------------------------------
+
+44. Question: What is upcasting?
+Answer:
+Converting subclass object to superclass reference.
+
+Example:
+Animal a = new Dog();
+
+--------------------------------------------------
+
+45. Question: What is downcasting?
+Answer:
+Converting superclass reference back to subclass object.
+
+Example:
+Dog d = (Dog) a;
+
+--------------------------------------------------
+
+46. Question: What is a marker interface?
+Answer:
+An empty interface that provides special behavior to JVM.
+
+Example:
+Serializable
+Cloneable
+
+--------------------------------------------------
+
+47. Question: What is serialization?
+Answer:
+Serialization converts an object into a byte stream for storage or transmission.
+
+--------------------------------------------------
+
+48. Question: What is deserialization?
+Answer:
+Deserialization converts a byte stream back into an object.
+
+--------------------------------------------------
+
+49. Question: What is the main method?
+Answer:
+The main method is the entry point of a Java program.
+
+public static void main(String[] args)
+
+--------------------------------------------------
+
+50. Question: What is the difference between compile time and runtime polymorphism?
+Answer:
+Compile-time polymorphism is method overloading resolved during compilation.
+Runtime polymorphism is method overriding resolved during runtime.
+
+--------------------------------------------------
+
+
+ADVANCED CORE JAVA INTERVIEW QUESTIONS (51–90)
+
+--------------------------------------------------
+
+51. Question: What happens if we do not provide a constructor in a class?
+
+Answer:
+If a class does not define any constructor, the Java compiler automatically provides a default constructor.
+
+This default constructor:
+- Has no parameters
+- Calls the parent class constructor
+- Initializes instance variables with default values
+--------------------------------------------------
+
+52. Question: Can a constructor be private?
+
+Answer:
+Yes, a constructor can be private.
+
+Private constructors are commonly used in:
+- Singleton design pattern
+- Utility classes
+
+Example:
+class Singleton {
+   private Singleton() {}
+}
+
+This prevents object creation from outside the class.
+
+--------------------------------------------------
+
+53. Question: Can we override static methods in Java?
+
+Answer:
+No, static methods cannot be overridden because they belong to the class, not the object.
+However, they can be hidden if the same static method exists in a subclass.
+
+This is called **method hiding**, not overriding.
+
+--------------------------------------------------
+
+54. Question: Can we overload static methods?
+Answer:
+Yes, static methods can be overloaded because overloading depends on method parameters and not on runtime behavior.
+
+Example:
+static void add(int a, int b)
+static void add(int a, int b, int c)
+
+--------------------------------------------------
+
+55. Question: Can we override private methods?
+
+Answer:
+No, private methods cannot be overridden.
+
+Reason:
+Private methods are not visible to subclasses.
+They behave like completely independent methods in subclasses.
+
+--------------------------------------------------
+
+56. Question: Can we override final methods?
+
+Answer:
+No, final methods cannot be overridden.
+
+Reason:
+The final keyword prevents modification of the method behavior.
+
+Example:
+final void display()
+
+--------------------------------------------------
+
+57. Question: Can a class be both abstract and final?
+
+Answer:
+No.
+
+Abstract class:
+Must be extended.
+
+Final class:
+Cannot be extended.
+
+Therefore they are logically opposite and cannot be used together.
+
+--------------------------------------------------
+
+58. Question: What is compile-time binding?
+
+Answer:
+Compile-time binding (early binding) occurs when method calls are resolved during compilation.
+
+Example:
+Method overloading
+Static methods
+Private methods
+Final methods
+
+--------------------------------------------------
+
+59. Question: What is runtime binding?
+
+Answer:
+Runtime binding (dynamic binding) occurs when the method call is resolved at runtime.
+
+This happens during method overriding.
+
+Example:
+Animal a = new Dog();
+a.sound();
+
+The Dog version of sound() executes.
+
+--------------------------------------------------
+
+60. Question: What is method hiding?
+
+Answer:
+Method hiding occurs when a subclass defines a static method with the same signature as the parent class.
+
+Static methods are resolved using the reference type rather than object type.
+
+--------------------------------------------------
+
+61. Question: What happens when we create multiple objects of a class?
+
+Answer:
+Each object has:
+- Its own copy of instance variables
+- Shared static variables
+
+Example:
+Student s1 = new Student();
+Student s2 = new Student();
+Both share static variables but have separate instance variables.
+
+--------------------------------------------------
+
+62. Question: What is the difference between instance variable and local variable?
+
+Answer:
+
+Instance Variable:
+- Declared inside class
+- Accessible to all methods
+- Stored in heap memory
+
+Local Variable:
+- Declared inside methods
+- Accessible only inside that method
+- Stored in stack memory
+
+--------------------------------------------------
+
+63. Question: What is the difference between instance method and static method?
+
+Answer:
+
+Instance Method:
+Requires object creation.
+
+Example:
+obj.display()
+
+Static Method:
+Can be called without object.
+
+Example:
+ClassName.method()
+
+--------------------------------------------------
+
+64. Question: Can we access non-static variables inside static methods?
+
+Answer:
+No.
+
+Static methods belong to the class while non-static variables belong to objects.
+
+Therefore an object reference is required.
+
+Example:
+Student s = new Student();
+s.name;
+
+--------------------------------------------------
+
+65. Question: What is a memory leak in Java?
+
+Answer:
+A memory leak occurs when objects are no longer needed but still referenced, preventing garbage collection.
+
+This leads to unnecessary memory consumption.
+
+--------------------------------------------------
+
+66. Question: What is the difference between new keyword and newInstance()?
+
+Answer:
+
+new keyword:
+Used to create objects normally.
+
+newInstance():
+Used in reflection to dynamically create objects.
+
+--------------------------------------------------
+
+67. Question: What is reflection in Java?
+
+Answer:
+Reflection allows Java programs to inspect and manipulate classes, methods, and fields at runtime.
+
+It is used in frameworks like:
+Spring
+Hibernate
+
+--------------------------------------------------
+
+68. Question: What is class loading in Java?
+
+Answer:
+Class loading is the process of loading class files into JVM memory.
+
+It happens in three phases:
+1. Loading
+2. Linking
+3. Initialization
+
+--------------------------------------------------
+
+69. Question: What are ClassLoaders?
+
+Answer:
+ClassLoaders load Java classes into JVM memory.
+
+Types:
+Bootstrap ClassLoader
+Extension ClassLoader
+Application ClassLoader
+
+--------------------------------------------------
+
+70. Question: What is the bootstrap class loader?
+
+Answer:
+Bootstrap class loader loads core Java classes like:
+
+java.lang
+java.util
+java.io
+
+--------------------------------------------------
+
+71. Question: What is the difference between String literal and String object?
+
+Answer:
+String literal:
+Stored in string pool.
+
+Example:
+String s = "Java";
+
+String object:
+Stored in heap.
+
+Example:
+String s = new String("Java");
+
+--------------------------------------------------
+
+72. Question: What happens if we create multiple String objects with new keyword?
+
+Answer:
+Each new keyword creates a new object in heap memory even if the value is same.
+
+--------------------------------------------------
+
+73. Question: What is the difference between StringBuilder and StringBuffer?
+
+Answer:
+StringBuilder:
+Not thread safe:
+Faster:
+
+StringBuffer:
+Thread safe :
+Slightly slower :
+--------------------------------------------------
+
+74. Question: What is immutability in Java?
+
+Answer:
+An immutable object cannot be modified once created.
+
+Example:
+String
+
+--------------------------------------------------
+
+75. Question: How can we create immutable classes?
+
+Answer:
+Steps:
+- Declare class as final
+- Make variables private final
+- Do not provide setters
+- Initialize values using constructor
+
+--------------------------------------------------
+
+76. Question: What is the difference between pass by value and pass by reference in Java?
+
+Answer:
+Java uses **pass by value** only.
+However object references are passed as values.
+
+--------------------------------------------------
+
+77. Question: What is tight coupling?
+
+Answer:
+Tight coupling occurs when classes depend heavily on each other.
+This makes code difficult to maintain.
+
+--------------------------------------------------
+
+78. Question: What is loose coupling?
+
+Answer:
+Loose coupling means classes are independent and interact using interfaces.
+
+This improves flexibility and maintainability.
+
+--------------------------------------------------
+
+79. Question: What is the difference between aggregation and composition?
+
+Answer:
+
+Aggregation:
+Weak relationship
+Objects can exist independently.
+
+Composition:
+Strong relationship
+Objects depend on parent object.
+
+--------------------------------------------------
+
+80. Question: What is the difference between IS-A and HAS-A relationship?
+
+Answer:
+
+IS-A:
+Inheritance relationship.
+
+Example:
+Dog IS-A Animal
+
+HAS-A:
+Composition or aggregation.
+
+Example:
+Car HAS-A Engine
+
+--------------------------------------------------
+
+81. Question: What is a singleton class?
+
+Answer:
+Singleton ensures only one instance of a class exists.
+
+Example:
+Logger
+Database connection manager
+
+--------------------------------------------------
+
+82. Question: What is eager initialization in singleton?
+
+Answer:
+Object is created when class loads.
+
+Example:
+private static Singleton instance = new Singleton();
+
+--------------------------------------------------
+
+83. Question: What is lazy initialization in singleton?
+
+Answer:
+Object is created only when needed.
+
+--------------------------------------------------
+
+84. Question: What is double checked locking in singleton?
+
+Answer:
+It improves performance by checking instance twice before synchronization.
+
+--------------------------------------------------
+
+85. Question: What is dependency inversion principle?
+
+Answer:
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+
+--------------------------------------------------
+
+86. Question: What is the open closed principle?
+
+Answer:
+Classes should be open for extension but closed for modification.
+
+--------------------------------------------------
+
+87. Question: What is the single responsibility principle?
+
+Answer:
+A class should have only one reason to change.
+
+--------------------------------------------------
+
+88. Question: What is Liskov substitution principle?
+
+```
+Question: What is Liskov Substitution Principle (LSP)?
+
+Answer:
+
+The Liskov Substitution Principle states that:
+
+"Objects of a subclass should be able to replace objects of the parent class 
+without breaking the correctness of the program."
+
+In simple words:
+If class B is a subclass of class A, then we should be able to use B anywhere A is expected without changing the behavior of the program.
+
+This principle ensures that inheritance is used correctly.
+--------------------------------------------------
+
+Example that VIOLATES LSP
+
+class Bird {
+    void fly() {
+        System.out.println("Bird can fly");
+    }
+}
+
+class Sparrow extends Bird {
+}
+
+class Ostrich extends Bird {
+    void fly() {
+        throw new UnsupportedOperationException("Ostrich cannot fly");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Bird bird = new Ostrich();
+        bird.fly();   // Runtime problem
+    }
+}
+
+Explanation:
+Here Ostrich extends Bird, but Ostrich cannot fly.
+So when the program expects Bird to fly, Ostrich breaks that behavior.
+This violates the Liskov Substitution Principle.
+
+--------------------------------------------------
+Correct Design (Following LSP)
+class Bird {
+}
+
+class FlyingBird extends Bird {
+    void fly() {
+        System.out.println("Flying bird");
+    }
+}
+
+class Sparrow extends FlyingBird {
+}
+
+class Ostrich extends Bird {
+}
+
+Now:
+
+FlyingBird bird = new Sparrow();
+bird.fly();
+
+Explanation:
+
+Only birds that can fly extend FlyingBird.
+Ostrich does not inherit the fly behavior.
+
+So no incorrect behavior occurs.
+
+--------------------------------------------------
+
+Real Life Example
+
+Vehicle example:
+
+class Vehicle {
+    void startEngine() {}
+}
+
+class Car extends Vehicle {
+}
+
+class Bicycle extends Vehicle {
+}
+
+This is wrong because bicycles do not have engines.
+
+Better design:
+
+class Vehicle {
+}
+
+class EngineVehicle extends Vehicle {
+    void startEngine() {}
+}
+
+class Car extends EngineVehicle {
+}
+
+class Bicycle extends Vehicle {
+}
+
+--------------------------------------------------
+
+Interview One-Line Answer
+Liskov Substitution Principle means a subclass should behave in such a way that it can replace its parent class without breaking the program's functionality.
+```
+
+✅ **Quick Interview Tip (very important):**
+
+Interviewers often ask:
+**"Which SOLID principle is most commonly violated in inheritance?"**
+
+Answer:
+**Liskov Substitution Principle**
+
+because developers sometimes force subclasses into behaviors they shouldn't support.
+--------------------------------------------------
+
+89. Question: What is interface segregation principle?
+
+Answer:
+Clients should not be forced to implement interfaces they do not use.
+
+--------------------------------------------------
+
+90. Question: What is dependency injection?
+
+Answer:
+Question: What is Dependency Injection (DI)?
+
+Answer:
+Dependency Injection is a design pattern where an object receives its dependencies 
+from outside rather than creating them itself.
+
+In simple words:
+Instead of a class creating the objects it needs, those objects are provided 
+(injected) from outside.
+
+This helps achieve:
+- Loose coupling
+- Easier testing
+- Better maintainability
+
+--------------------------------------------------
+1. Without Dependency Injection (Tightly Coupled)
+
+class Engine {
+    void start() {
+        System.out.println("Engine started");
+    }
+}
+
+class Car {
+
+    Engine engine = new Engine();   // Car creates its own dependency
+
+    void startCar() {
+        engine.start();
+    }
+}
+
+Problem:
+Car is tightly coupled with Engine.
+If we want to change Engine to ElectricEngine, we must modify the Car class.
+--------------------------------------------------
+
+2. With Dependency Injection (Loosely Coupled)
+
+class Engine {
+    void start() {
+        System.out.println("Engine started");
+    }
+}
+
+class Car {
+
+    Engine engine;
+
+    Car(Engine engine) {   // Dependency injected through constructor
+        this.engine = engine;
+    }
+
+    void startCar() {
+        engine.start();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Engine engine = new Engine();
+        Car car = new Car(engine);
+
+        car.startCar();
+    }
+}
+
+Now the Car class does not create Engine.
+The Engine object is provided from outside.
+This makes the system flexible.
+
+--------------------------------------------------
+
+3. Real-World Example
+
+Think about a Mobile Phone and Charger.
+
+Without DI:
+Phone creates its own charger internally.
+
+With DI:
+You plug any compatible charger into the phone.
+
+Phone does not care which charger it gets.
+
+Phone = Class
+Charger = Dependency
+
+--------------------------------------------------
+4. Real Example in Spring Framework
+
+Spring automatically injects dependencies using annotations.
+
+@Service
+class EngineService {
+}
+
+@Service
+class CarService {
+
+    @Autowired
+    EngineService engineService;
+
+}
+
+Spring container creates the EngineService object 
+and injects it into CarService automatically.
+
+--------------------------------------------------
+
+5. Types of Dependency Injection
+
+1. Constructor Injection
+   Dependency passed through constructor.
+
+2. Setter Injection
+   Dependency passed using setter method.
+
+3. Field Injection
+   Dependency injected directly into variable (used in Spring).
+
+--------------------------------------------------
+
+6. Interview Short Answer
+
+Dependency Injection is a design pattern where objects receive their dependencies 
+from an external source instead of creating them internally, helping achieve loose coupling and better testability.
+
+--------------------------------------------------
+MOST ASKED TRICKY CORE JAVA QUESTIONS (91–115)
+--------------------------------------------------
+91. Question: Why is the main method static in Java?
+
+Answer:
+The main method is static because the JVM needs to call it without creating an object of the class.
+When a Java program starts, no objects exist yet. If main were non-static, the JVM would first need to create an object, which would create a circular dependency.
+
+Therefore the method is declared:
+public static void main(String[] args)
+
+--------------------------------------------------
+
+92. Question: Can we overload the main method?
+
+Answer:
+Yes, the main method can be overloaded.
+
+Example:
+
+public static void main(int a)
+public static void main(String args)
+
+However, JVM will only execute:
+
+public static void main(String[] args)
+
+--------------------------------------------------
+
+93. Question: Can we make the main method private?
+
+Answer:
+No.
+
+The JVM must access the main method from outside the class. If it is private, JVM cannot access it and the program will not run.
+
+--------------------------------------------------
+
+94. Question: What happens if the main method is not static?
+
+Answer:
+The program will compile but will not run.
+
+JVM will throw an error because it cannot call a non-static method without creating an object.
+
+--------------------------------------------------
+
+95. Question: Can we declare a class without a main method?
+
+Answer:
+Yes.
+A class can exist without a main method, but it cannot run independently.
+
+Example:
+Utility classes
+Library classes
+
+--------------------------------------------------
+
+96. Question: What is the difference between compile-time error and runtime error?
+
+Answer:
+
+Compile-time error:
+Detected by compiler during compilation.
+Example:
+Syntax errors
+
+Runtime error:
+Occurs while the program is running.
+Example:
+NullPointerException
+
+--------------------------------------------------
+
+97. Question: What happens when we write System.out.println()?
+
+Answer:
+System is a class.
+
+out is a static object of PrintStream class.
+
+println() is a method of PrintStream.
+
+Flow:
+System → out → println()
+
+--------------------------------------------------
+
+98. Question: Why is String considered immutable?
+
+Answer:
+String is immutable because once created its value cannot change.
+
+Reasons:
+ Security
+ Thread safety
+ String pool optimization
+ Caching of hashcodes
+
+--------------------------------------------------
+
+99. Question: What happens internally when we create a String literal?
+
+Answer:
+When we write:
+
+String s = "Java";
+
+JVM checks the string pool.
+
+If "Java" exists → reuse object.
+If not → create new object in string pool.
+
+--------------------------------------------------
+
+100. Question: What happens when we use new String("Java")?
+
+Answer:
+Two objects may be created.
+
+One in string pool ("Java")
+One in heap memory
+
+Example:
+String s = new String("Java")
+
+--------------------------------------------------
+
+101. Question: What is the difference between == and equals()?
+
+Answer:
+
+== compares memory references.
+
+equals() compares object content.
+
+Example:
+String a = "Java";
+String b = "Java";
+
+a == b → true
+a.equals(b) → true
+
+--------------------------------------------------
+
+102. Question: Why do we override equals() and hashCode() together?
+
+Answer:
+Java contract states:
+
+If two objects are equal using equals(), they must return the same hashCode.
+Failing to override both can cause incorrect behavior in hashing mechanisms.
+
+--------------------------------------------------
+
+103. Question: What is the default value of instance variables?
+
+Answer:
+
+int → 0
+double → 0.0
+boolean → false
+object → null
+
+Local variables do not get default values.
+
+--------------------------------------------------
+
+104. Question: Why must local variables be initialized?
+
+Answer:
+Local variables are stored in stack memory and Java does not assign default values to them.
+
+Therefore they must be initialized before use.
+
+--------------------------------------------------
+
+105. Question: What is the difference between class loading and object creation?
+
+Answer:
+
+Class loading:
+Occurs when JVM loads the class definition.
+
+Object creation:
+Occurs when new keyword creates instance of the class.
+
+--------------------------------------------------
+
+106. Question: What is the difference between stack overflow and out of memory error?
+
+Answer:
+
+StackOverflowError:
+Occurs when stack memory is exhausted (often due to deep recursion).
+
+OutOfMemoryError:
+Occurs when heap memory cannot allocate new objects.
+
+--------------------------------------------------
+
+107. Question: What is a dead code in Java?
+
+Answer:
+Dead code is code that never executes.
+
+Example:
+
+if(false){
+   System.out.println("Never runs");
+}
+
+--------------------------------------------------
+
+108. Question: What is unreachable code?
+
+Answer:
+Code that appears after return, break, or throw statements.
+
+Example:
+
+return;
+System.out.println("Unreachable");
+
+Compiler throws error.
+
+--------------------------------------------------
+
+109. Question: What is a transient keyword?
+
+Answer:
+Transient variables are not serialized during serialization.
+
+Example:
+
+transient int password;
+
+--------------------------------------------------
+
+110. Question: What is the volatile keyword?
+
+Answer:
+Volatile ensures that a variable's value is always read from main memory rather than CPU cache.
+
+Used in multithreading.
+
+--------------------------------------------------
+
+111. Question: What is a native method?
+
+Answer:
+A native method is implemented in another language like C or C++ and called from Java.
+
+Example:
+
+public native void display();
+
+--------------------------------------------------
+
+112. Question: What is the difference between JIT compiler and JVM?
+
+Answer:
+
+JVM:
+Executes Java bytecode.
+
+JIT Compiler:
+Improves performance by converting frequently used bytecode into native machine code.
+
+--------------------------------------------------
+
+113. Question: What is bytecode?
+
+Answer:
+Bytecode is intermediate code generated by Java compiler.
+
+It is platform independent and executed by JVM.
+
+--------------------------------------------------
+
+114. Question: Why is Java called platform independent?
+
+Answer:
+Because Java code compiles into bytecode which can run on any machine that has a JVM.
+
+--------------------------------------------------
+
+115. Question: What is WORA in Java?
+
+Answer:
+WORA stands for:
+
+Write Once Run Anywhere
+
+Meaning Java programs can run on any platform without modification.
+
+--------------------------------------------------
+
+
+CORE JAVA DIFFERENCE QUESTIONS (VS SERIES)
+
+--------------------------------------------------
+
+1. Question: Difference between Abstract Class vs Interface
+
+Answer:
+Abstract Class
+- Can have abstract and concrete methods
+- Can have instance variables
+- Can have constructors
+- Supports single inheritance
+- Methods can have any access modifier
+
+Interface
+- Used to define a contract
+- Supports multiple inheritance
+- Methods are public by default
+- Variables are public static final
+- From Java 8 it supports default and static methods
+
+--------------------------------------------------
+
+2. Question: Difference between Method Overloading vs Method Overriding
+
+Answer:
+
+Method Overloading
+- Same method name with different parameters
+- Happens in the same class
+- Compile-time polymorphism
+- Method signature must differ
+
+Method Overriding
+- Same method in parent and child class
+- Runtime polymorphism
+- Method signature must be same
+
+--------------------------------------------------
+
+3. Question: Difference between == vs equals()
+
+Answer:
+==
+- Compares memory references
+- Checks if two references point to same object
+
+equals()
+- Compares logical equality
+- Used to compare object content
+
+--------------------------------------------------
+
+4. Question: Difference between String vs StringBuilder vs StringBuffer
+
+Answer:
+
+String
+- Immutable
+- Thread safe
+- Stored in string pool
+
+StringBuilder
+- Mutable
+- Not thread safe
+- Faster performance
+
+StringBuffer
+- Mutable
+- Thread safe
+- Slightly slower than StringBuilder
+
+--------------------------------------------------
+
+5. Question: Difference between Heap Memory vs Stack Memory
+
+Answer:
+
+Heap Memory
+- Stores objects
+- Shared across threads
+- Managed by garbage collector
+
+Stack Memory
+- Stores method calls and local variables
+- Each thread has its own stack
+- Automatically cleaned after method execution
+
+--------------------------------------------------
+
+6. Question: Difference between JDK vs JRE vs JVM
+
+Answer:
+
+JDK
+- Java Development Kit
+- Used to develop Java applications
+- Contains JRE + development tools
+
+JRE
+- Java Runtime Environment
+- Provides runtime environment to run Java programs
+
+JVM
+- Java Virtual Machine
+- Executes bytecode
+
+--------------------------------------------------
+
+7. Question: Difference between Compile-time vs Runtime Polymorphism
+
+Answer:
+
+Compile-time Polymorphism
+- Achieved through method overloading
+- Resolved during compilation
+
+Runtime Polymorphism
+- Achieved through method overriding
+- Resolved during runtime
+
+--------------------------------------------------
+
+8. Question: Difference between Instance Variable vs Local Variable
+
+Answer:
+
+Instance Variable
+- Declared inside class
+- Belongs to object
+- Gets default value
+
+Local Variable
+- Declared inside method
+- Scope limited to method
+- Must be initialized
+
+--------------------------------------------------
+
+9. Question: Difference between Static Method vs Instance Method
+
+Answer:
+
+Static Method
+- Belongs to class
+- Can be called without object
+
+Instance Method
+- Belongs to object
+- Requires object creation
+
+--------------------------------------------------
+
+10. Question: Difference between Final vs Finally vs Finalize
+
+Answer:
+
+Final
+- Keyword
+- Used with class, method, variable
+
+Finally
+- Block used in exception handling
+- Always executes
+
+Finalize
+- Method called before garbage collection
+
+--------------------------------------------------
+
+11. Question: Difference between Aggregation vs Composition
+
+Answer:
+
+Aggregation
+- Weak relationship
+- Child object can exist independently
+
+Composition
+- Strong relationship
+- Child object depends on parent
+
+--------------------------------------------------
+
+12. Question: Difference between IS-A vs HAS-A Relationship
+
+Answer:
+
+IS-A
+- Represents inheritance
+- Example: Dog IS-A Animal
+
+HAS-A
+- Represents composition
+- Example: Car HAS-A Engine
+--------------------------------------------------
+Question: What is the difference between Aggregation and Composition?
+
+Answer:
+
+Aggregation and Composition both represent a "HAS-A" relationship between classes.
+They describe how objects are associated with each other.
+
+The main difference is the strength of the relationship and lifecycle dependency.
+
+--------------------------------------------------
+
+1. Aggregation
+
+Aggregation represents a weak relationship between objects.
+
+In aggregation:
+- The parent object contains a reference to the child object.
+- The child object can exist independently even if the parent object is destroyed.
+
+In simple words:
+The child object has its own lifecycle.
+
+Example (Real Life):
+
+University and Professor
+
+A university has professors.
+But professors can exist even if the university shuts down.
+
+So the relationship is aggregation.
+
+--------------------------------------------------
+
+Java Example (Aggregation)
+
+class Engine {
+    void start() {
+        System.out.println("Engine starts");
+    }
+}
+
+class Car {
+
+    Engine engine;
+
+    Car(Engine engine) {   // Engine passed from outside
+        this.engine = engine;
+    }
+
+    void startCar() {
+        engine.start();
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+
+        Engine engine = new Engine();
+        Car car = new Car(engine);
+
+        car.startCar();
+    }
+}
+
+Explanation:
+
+The Engine object exists independently.
+It is created outside and passed into Car.
+
+If the Car object is destroyed, the Engine object can still exist.
+
+--------------------------------------------------
+
+2. Composition
+
+Composition represents a strong relationship between objects.
+
+In composition:
+- The child object cannot exist independently.
+- If the parent object is destroyed, the child object is also destroyed.
+
+In simple words:
+The child object's lifecycle depends on the parent object.
+
+--------------------------------------------------
+
+Example (Real Life)
+
+House and Rooms
+
+A house contains rooms.
+If the house is destroyed, the rooms no longer exist independently.
+
+--------------------------------------------------
+
+Java Example (Composition)
+
+class Engine {
+    void start() {
+        System.out.println("Engine starts");
+    }
+}
+
+class Car {
+
+    Engine engine = new Engine();  // created inside the class
+
+    void startCar() {
+        engine.start();
+    }
+}
+
+Explanation:
+
+Engine object is created inside the Car class.
+It cannot exist without the Car object.
+
+If Car is destroyed, Engine is also destroyed.
+
+--------------------------------------------------
+
+Difference Summary
+
+Aggregation
+- Weak relationship
+- Child object exists independently
+- Child object is passed from outside
+
+Composition
+- Strong relationship
+- Child object depends on parent
+- Child object created inside parent
+
+--------------------------------------------------
+
+Question: What is the difference between IS-A and HAS-A relationship?
+
+Answer:
+
+IS-A and HAS-A describe relationships between classes.
+
+--------------------------------------------------
+
+1. IS-A Relationship
+
+IS-A represents inheritance.
+
+It means one class is a specialized version of another class.
+
+Example:
+
+Dog IS-A Animal
+
+This means Dog inherits properties and behaviors from Animal.
+
+--------------------------------------------------
+
+Java Example (IS-A)
+
+class Animal {
+    void eat() {
+        System.out.println("Animal eats");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+Explanation:
+
+Dog inherits behavior from Animal.
+So Dog IS-A Animal.
+
+--------------------------------------------------
+
+Real Life Example
+
+Car IS-A Vehicle
+Manager IS-A Employee
+Cat IS-A Animal
+
+--------------------------------------------------
+
+2. HAS-A Relationship
+
+HAS-A represents composition or aggregation.
+
+It means one class contains another class as a member.
+
+Example:
+
+Car HAS-A Engine
+
+--------------------------------------------------
+
+Java Example (HAS-A)
+
+class Engine {
+    void start() {
+        System.out.println("Engine starts");
+    }
+}
+
+class Car {
+
+    Engine engine = new Engine();
+
+    void startCar() {
+        engine.start();
+    }
+}
+
+Explanation:
+
+Car contains Engine.
+So Car HAS-A Engine.
+
+--------------------------------------------------
+
+Real Life Examples
+
+Car HAS-A Engine
+House HAS-A Room
+Computer HAS-A CPU
+Person HAS-A Heart
+
+--------------------------------------------------
+
+Summary
+
+IS-A
+- Represents inheritance
+- Uses "extends"
+- Example: Dog IS-A Animal
+
+HAS-A
+- Represents composition or aggregation
+- Uses object reference
+- Example: Car HAS-A Engine
+
+--------------------------------------------------
+
+13. Question: Difference between Upcasting vs Downcasting
+
+Answer:
+
+Upcasting
+- Child object assigned to parent reference
+- Happens automatically
+
+Example:
+Animal a = new Dog();
+
+Downcasting
+- Parent reference converted to child type
+- Requires explicit casting
+
+Example:
+Dog d = (Dog) a;
+
+--------------------------------------------------
+
+14. Question: Difference between String Literal vs String Object
+
+Answer:
+
+String Literal
+- Stored in string pool
+- Memory efficient
+
+Example:
+String s = "Java";
+
+String Object
+- Stored in heap memory
+
+Example:
+String s = new String("Java");
+
+--------------------------------------------------
+
+15. Question: Difference between Shallow Copy vs Deep Copy
+
+Answer:
+
+Shallow Copy
+- Copies object references
+- Both objects share same referenced objects
+
+Deep Copy
+- Copies object and referenced objects
+- Fully independent copy
+
+--------------------------------------------------
+
+16. Question: Difference between Class vs Object
+
+Answer:
+
+Class
+- Blueprint/template
+- Does not occupy memory
+
+Object
+- Instance of class
+- Occupies memory
+
+--------------------------------------------------
+
+17. Question: Difference between Constructor vs Method
+
+Answer:
+
+Constructor
+- Used to initialize object
+- Same name as class
+- No return type
+
+Method
+- Used to perform operations
+- Has return type
+
+--------------------------------------------------
+
+18. Question: Difference between Static Variable vs Instance Variable
+
+Answer:
+
+Static Variable
+- Shared across objects
+- Belongs to class
+
+Instance Variable
+- Each object has its own copy
+- Belongs to object
+
+--------------------------------------------------
+
+19. Question: Difference between Interface vs Marker Interface
+
+Answer:
+
+Interface
+- Contains abstract methods
+- Used to define behavior
+
+Marker Interface
+- Empty interface
+- Provides special behavior to JVM
+
+Example:
+Serializable
+
+--------------------------------------------------
+
+20. Question: Difference between Serialization vs Deserialization
+
+Answer:
+
+Serialization
+- Convert object into byte stream
+- Used for storage or network transfer
+
+Deserialization
+- Convert byte stream back to object
+
+--------------------------------------------------
+
+ADVANCED CORE JAVA DIFFERENCE QUESTIONS (VS SERIES 21–50)
+
+--------------------------------------------------
+
+21. Question: Difference between Abstract Class vs Concrete Class
+
+Answer:
+
+Abstract Class
+- Cannot be instantiated
+- May contain abstract methods
+- Used as base class for other classes
+
+Concrete Class
+- Can be instantiated
+- Contains complete implementation of methods
+
+--------------------------------------------------
+
+22. Question: Difference between Method Overloading vs Constructor Overloading
+
+Answer:
+
+Method Overloading
+- Same method name with different parameters
+- Used to perform different operations
+
+Constructor Overloading
+- Multiple constructors with different parameters
+- Used to initialize objects in different ways
+
+--------------------------------------------------
+
+23. Question: Difference between Static Binding vs Dynamic Binding
+
+Answer:
+
+Static Binding
+- Resolved at compile time
+- Used for static, private, and final methods
+
+Dynamic Binding
+- Resolved at runtime
+- Used for overridden methods
+
+--------------------------------------------------
+
+24. Question: Difference between Early Binding vs Late Binding
+
+Answer:
+
+Early Binding
+- Method call resolved during compilation
+- Faster execution
+
+Late Binding
+- Method call resolved during runtime
+- Used in runtime polymorphism
+
+--------------------------------------------------
+
+25. Question: Difference between ClassLoader vs Class.forName()
+
+Answer:
+
+ClassLoader
+- Loads class into JVM memory
+
+Class.forName()
+- Dynamically loads class at runtime
+- Often used in JDBC driver loading
+
+--------------------------------------------------
+
+26. Question: Difference between Object Creation vs Object Initialization
+
+Answer:
+
+Object Creation
+- Memory allocation for object
+- Done using new keyword
+
+Object Initialization
+- Assigning values to object variables
+- Done using constructor
+
+--------------------------------------------------
+
+27. Question: Difference between Instance Block vs Static Block
+
+Answer:
+
+Instance Block
+- Executes every time object is created
+
+Static Block
+- Executes only once when class loads
+
+--------------------------------------------------
+
+28. Question: Difference between final class vs abstract class
+
+Answer:
+
+Final Class
+- Cannot be extended
+- Used for security and immutability
+
+Abstract Class
+- Must be extended
+- Used to provide partial implementation
+
+--------------------------------------------------
+
+29. Question: Difference between Mutable vs Immutable Object
+
+Answer:
+
+Mutable Object
+- State can be modified
+Example: StringBuilder
+
+Immutable Object
+- State cannot change once created
+Example: String
+
+--------------------------------------------------
+
+30. Question: Difference between pass-by-value vs pass-by-reference
+
+Answer:
+
+Pass-by-value
+- Copy of variable is passed
+- Changes do not affect original value
+
+Pass-by-reference
+- Reference of object passed
+- Changes affect original object
+
+Java uses pass-by-value only.
+
+--------------------------------------------------
+
+31. Question: Difference between Checked vs Unchecked Exceptions
+
+Answer:
+
+Checked Exception
+- Checked at compile time
+- Must be handled
+
+Unchecked Exception
+- Occurs during runtime
+- Not mandatory to handle
+
+--------------------------------------------------
+
+32. Question: Difference between throw vs throws
+
+Answer:
+
+throw
+- Used to explicitly throw an exception
+
+throws
+- Declares exceptions that a method may throw
+
+--------------------------------------------------
+
+33. Question: Difference between finally vs finalize
+
+Answer:
+
+finally
+- Block used in exception handling
+
+finalize
+- Method called before garbage collection
+
+--------------------------------------------------
+
+34. Question: Difference between String Pool vs Heap
+
+Answer:
+
+String Pool
+- Special memory area for string literals
+
+Heap
+- Stores objects created using new keyword
+
+--------------------------------------------------
+
+35. Question: Difference between new keyword vs newInstance()
+
+Answer:
+new
+- Used to create object normally
+
+newInstance()
+- Used in reflection to create object dynamically
+
+--------------------------------------------------
+
+36. Question: Difference between JVM vs JIT Compiler
+Answer:
+
+JVM
+- Executes Java bytecode
+
+JIT Compiler
+- Converts bytecode into native machine code for faster execution
+
+--------------------------------------------------
+
+37. Question: Difference between Native Method vs Java Method
+
+Answer:
+
+Native Method
+- Implemented in languages like C or C++
+
+Java Method
+- Implemented in Java language
+
+--------------------------------------------------
+
+38. Question: Difference between Tight Coupling vs Loose Coupling
+
+Answer:
+
+Tight Coupling
+- Classes depend heavily on each other
+- Hard to maintain
+
+Loose Coupling
+- Classes depend on interfaces
+- Easy to maintain
+
+--------------------------------------------------
+
+39. Question: Difference between Interface vs Abstract Method
+
+Answer:
+
+Interface
+- Contains abstract methods and constants
+- Used to define contract
+
+Abstract Method
+- Method without implementation
+- Declared inside abstract class
+
+--------------------------------------------------
+
+40. Question: Difference between IS-A vs HAS-A Relationship
+
+Answer:
+
+IS-A
+- Represents inheritance
+
+Example:
+Dog IS-A Animal
+
+HAS-A
+- Represents composition
+
+Example:
+Car HAS-A Engine
+
+--------------------------------------------------
+
+41. Question: Difference between Garbage Collection vs Manual Memory Management
+
+Answer:
+
+Garbage Collection
+- Automatic memory cleanup
+- Managed by JVM
+
+Manual Memory Management
+- Programmer manually frees memory
+
+--------------------------------------------------
+
+42. Question: Difference between Dead Code vs Unreachable Code
+
+Answer:
+
+Dead Code
+- Code that never executes logically
+
+Unreachable Code
+- Code after return/break statement
+
+--------------------------------------------------
+
+43. Question: Difference between Bytecode vs Machine Code
+
+Answer:
+
+Bytecode
+- Intermediate code generated by Java compiler
+
+Machine Code
+- Code directly executed by CPU
+
+--------------------------------------------------
+
+44. Question: Difference between Platform Dependent vs Platform Independent
+
+Answer:
+
+Platform Dependent
+- Runs only on specific OS
+
+Platform Independent
+- Runs on any OS with JVM
+
+--------------------------------------------------
+
+45. Question: Difference between Aggregation vs Association
+
+Answer:
+
+Aggregation
+- Special form of association
+- Weak relationship
+
+Association
+- General relationship between objects
+
+--------------------------------------------------
+
+46. Question: Difference between Composition vs Aggregation
+
+Answer:
+
+Composition
+- Strong relationship
+- Child cannot exist independently
+
+Aggregation
+- Weak relationship
+- Child can exist independently
+
+--------------------------------------------------
+
+47. Question: Difference between Singleton vs Normal Class
+
+Answer:
+
+Singleton Class
+- Only one object allowed
+
+Normal Class
+- Multiple objects allowed
+
+--------------------------------------------------
+
+48. Question: Difference between Eager Initialization vs Lazy Initialization
+
+Answer:
+
+Eager Initialization
+- Object created at class loading time
+
+Lazy Initialization
+- Object created when needed
+
+--------------------------------------------------
+
+49. Question: Difference between Serialization vs Externalization
+
+Answer:
+
+Serialization
+- Default object serialization
+
+Externalization
+- Programmer controls serialization process
+
+--------------------------------------------------
+
+50. Question: Difference between Comparable vs Comparator
+
+Answer:
+
+Comparable
+- Used for natural sorting
+- compareTo() method
+
+Comparator
+- Used for custom sorting
+- compare() method
+
+--------------------------------------------------
+
+Question: What is the difference between an abstract class and an interface? Also explain similarities and when to use each.
+
+Answer:
+
+1. Similarities between Abstract Class and Interface
+
+Both are used to achieve abstraction in Java.
+
+Similarities:
+- Both cannot be instantiated directly.
+- Both can contain abstract methods.
+- Both are used to achieve abstraction and define common behavior.
+- Both are extended/implemented by other classes.
+- Both support polymorphism.
+
+--------------------------------------------------
+
+2. Differences between Abstract Class and Interface
+
+Abstract Class
+- Can contain both abstract and concrete methods.
+- Can have instance variables.
+- Can have constructors.
+- Can have any access modifier (private, protected, public).
+- A class can extend only one abstract class.
+- Used when classes share common state and behavior.
+
+Interface
+- Mostly contains abstract methods (until Java 8).
+- From Java 8 it can contain default and static methods.
+- From Java 9 it can contain private methods.
+- Variables are by default public static final.
+- Methods are by default public.
+- A class can implement multiple interfaces.
+- Used to define capabilities or contracts.
+
+--------------------------------------------------
+
+3. Example
+
+Abstract Class Example
+
+abstract class Animal {
+    String name;
+
+    abstract void sound();
+
+    void sleep() {
+        System.out.println("Animal is sleeping");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+--------------------------------------------------
+
+Interface Example
+
+interface Flyable {
+    void fly();
+}
+
+class Bird implements Flyable {
+    public void fly() {
+        System.out.println("Bird can fly");
+    }
+}
+
+--------------------------------------------------
+
+4. When to Use Abstract Class
+
+Use Abstract Class when:
+
+- Classes share common fields or state
+- You want to provide default method implementations
+- You want constructors
+- Classes are closely related
+
+Example Use Case:
+Animal → Dog, Cat, Lion
+
+All animals share properties like:
+- name
+- age
+- eat()
+- sleep()
+
+--------------------------------------------------
+
+5. When to Use Interface
+
+Use Interface when:
+
+- You want to define capability or behavior
+- Multiple unrelated classes need the same functionality
+- Multiple inheritance is required
+
+Example Use Case:
+
+interface Flyable
+
+Implemented by:
+Bird
+Airplane
+Drone
+
+These classes are not related but share the ability to fly.
+
+----
+6. Real Interview Summary Answer (Short)
+Abstract class is used when classes share common state and behavior and we want partial implementation.
+Interface is used to define a contract or capability that multiple unrelated classes can implement.
+Abstract class supports single inheritance while interface supports multiple inheritance.
+
+FOLLOW-UP QUESTIONS: ABSTRACT CLASS vs INTERFACE
+
+--------------------------------------------------
+
+1. Question: Can an abstract class implement an interface?
+
+Answer:
+Yes.
+
+An abstract class can implement an interface but does not have to implement all its methods.
+
+Example:
+
+interface A {
+    void display();
+}
+
+abstract class B implements A {
+}
+
+Since B is abstract, it does not need to implement display().
+
+--------------------------------------------------
+
+2. Question: Can an interface extend another interface?
+
+Answer:
+Yes.
+
+An interface can extend one or more interfaces.
+
+Example:
+
+interface A {
+    void methodA();
+}
+
+interface B extends A {
+    void methodB();
+}
+
+This supports multiple inheritance in Java.
+
+--------------------------------------------------
+
+3. Question: Can an interface extend a class?
+
+Answer:
+No.
+
+An interface can only extend another interface.
+
+--------------------------------------------------
+
+4. Question: Can an abstract class extend another abstract class?
+
+Answer:
+Yes.
+
+An abstract class can extend another abstract class.
+
+Example:
+
+abstract class A {
+    abstract void show();
+}
+
+abstract class B extends A {
+}
+
+--------------------------------------------------
+
+5. Question: Can an interface have variables?
+
+Answer:
+Yes.
+
+But all variables in an interface are:
+
+public static final
+
+Example:
+
+interface A {
+    int x = 10;
+}
+
+This is internally:
+
+public static final int x = 10;
+
+--------------------------------------------------
+
+6. Question: Can an interface have constructors?
+
+Answer:
+No.
+
+Interfaces cannot have constructors because they cannot be instantiated.
+
+--------------------------------------------------
+
+7. Question: Can an abstract class have constructors?
+
+Answer:
+Yes.
+
+Abstract classes can have constructors because they are used by subclasses.
+
+Example:
+
+abstract class A {
+    A() {
+        System.out.println("Constructor of abstract class");
+    }
+}
+--------------------------------------------------
+
+8. Question: Can an interface have method implementations?
+
+Answer:
+Yes, starting from Java 8.
+
+Interfaces can have:
+default methods
+static methods
+
+Example:
+interface A {
+    default void show() {
+        System.out.println("Default method");
+    }
+}
+
+--------------------------------------------------
+
+9. Question: Can an interface contain private methods?
+
+Answer:
+Yes, since Java 9.
+
+Private methods are used internally by default methods.
+
+--------------------------------------------------
+
+10. Question: Can a class extend multiple abstract classes?
+
+Answer:
+No.
+
+Java does not support multiple inheritance for classes.
+
+A class can extend only one abstract class.
+However it can implement multiple interfaces.
+
+Example:
+
+class Test extends A implements B, C
+--------------------------------------------------
